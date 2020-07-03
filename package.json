@@ -10,14 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:autoggl.configure"
+		"onCommand:autoggl.authenticateToggl"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "autoggl.configure",
-				"title": "Configure Toggl"
+				"command": "autoggl.authenticateToggl",
+				"title": "Autoggl: Authenticate Toggl"
 			}
 		],
 		"configuration": {

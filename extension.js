@@ -6,9 +6,8 @@ const toggl = require("./toggl");
 const config = vscode.workspace.getConfiguration("autoggl");
 
 function activate(context) {
-  // Configure Toggl integration for user
-  const configure = vscode.commands.registerCommand(
-    "autoggl.configure",
+  const authenticateToggl = vscode.commands.registerCommand(
+    "autoggl.authenticateToggl",
     async () => {
       vscode.window
         .showInputBox({
@@ -58,7 +57,7 @@ function activate(context) {
     }
   );
 
-  context.subscriptions.push(configure);
+  context.subscriptions.push(authenticateToggl);
 }
 
 exports.activate = activate;
