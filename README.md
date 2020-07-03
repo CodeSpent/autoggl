@@ -1,6 +1,6 @@
-# toggl-code-auto README
+# autoggl-auto README
 
-This is the README for your extension "toggl-code-auto". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "autoggl-auto". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
