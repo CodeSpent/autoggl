@@ -1,30 +1,11 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
 const toggl = require("./toggl");
-
-/**
- * @param {vscode.ExtensionContext} context
- */
 
 // Autoggl configuration section. Dotted names not needed
 // when referencing autoggl configuration directly.
 const config = vscode.workspace.getConfiguration("autoggl");
 
 function activate(context) {
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with  registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand(
-    "autoggl-auto.helloWorld",
-    function () {
-      // The code you place here will be executed every time your command is executed
-
-      // Display a message box to the user
-      vscode.window.showInformationMessage("Hello World from autoggl-auto!");
-    }
-  );
-
   // Configure Toggl integration for user
   const configure = vscode.commands.registerCommand(
     "autoggl.configure",
@@ -77,7 +58,6 @@ function activate(context) {
     }
   );
 
-  context.subscriptions.push(disposable);
   context.subscriptions.push(configure);
 }
 

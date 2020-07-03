@@ -10,16 +10,11 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:autoggl.helloWorld",
 		"onCommand:autoggl.configure"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
-			{
-				"command": "autoggl.helloWorld",
-				"title": "Hello World"
-			},
 			{
 				"command": "autoggl.configure",
 				"title": "Configure Toggl"
