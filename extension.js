@@ -2,10 +2,10 @@ const vscode = require("vscode");
 const toggl = require("./toggl");
 
 function activate(context) {
-  const authenticateToggl = vscode.commands.registerCommand(
-    "autoggl.authenticateToggl",
+  const configureToggl = vscode.commands.registerCommand(
+    "autoggl.configureToggl",
     async () => {
-      vscode.window
+      await vscode.window
         .showInputBox({
           password: true,
           ignoreFocusOut: true,
@@ -16,7 +16,7 @@ function activate(context) {
           // Ensure a token is provided before continuing.
           if (!apiToken || apiToken === "" || apiToken === undefined) {
             vscode.window.showErrorMessage(
-              "Toggl Token Error: No token provided."
+              "No token provided. If a token is configured already, it will not be replaced."
             );
 
             return;
@@ -54,6 +54,39 @@ function activate(context) {
             }
           });
         });
+
+      const apiToken = vscode.workspace
+        .getConfiguration("autoggl")
+        .get("togglApiToken");
+
+      await toggl.getUserWorkspaces(apiToken).then((workspaces) => {
+        // Vscode QuickPick takes in an array of strings for selection
+        // so we'll map over the workspaces to get the names array
+        // then get the matching object to configure id.
+        let workspaceNames = workspaces.map((workspace) => {
+          return workspace.name;
+        });
+
+        vscode.window
+          .showQuickPick(workspaceNames, {
+            canPickMany: false,
+            ignoreFocusOut: true,
+            placeHolder: "Select a workspace..",
+          })
+          .then((selectedWorkspaceName) => {
+            let selectedWorkspaces = workspaces.filter(
+              (workspace) => workspace.name === selectedWorkspaceName
+            );
+            vscode.workspace
+              .getConfiguration()
+              .update("autoggl.workspaceId", selectedWorkspaces[0].id, true)
+              .then(() => {
+                vscode.window.showInformationMessage(
+                  `Workspace ${selectedWorkspaceName} configured.`
+                );
+              });
+          });
+      });
     }
   );
 
@@ -78,7 +111,7 @@ function activate(context) {
     }
   );
 
-  context.subscriptions.push(authenticateToggl);
+  context.subscriptions.push(configureToggl);
   context.subscriptions.push(enable);
   context.subscriptions.push(disable);
 }

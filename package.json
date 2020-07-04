@@ -14,8 +14,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "autoggl.authenticateToggl",
-				"title": "Autoggl: Authenticate Toggl"
+				"command": "autoggl.configureToggl",
+				"title": "Autoggl: Configure Toggl"
 			},
 			{
 				"command": "autoggl.enable",
@@ -39,6 +39,11 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Enable Toggl Tracking"
+				},
+				"autoggl.workspaceId": {
+					"type": "integer",
+					"default": 0,
+					"description": "ID of Toggl workspace to use"
 				}
 			}
 
