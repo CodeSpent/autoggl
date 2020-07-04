@@ -1,10 +1,6 @@
 const vscode = require("vscode");
 const toggl = require("./toggl");
 
-// Autoggl configuration section. Dotted names not needed
-// when referencing autoggl configuration directly.
-const config = vscode.workspace.getConfiguration("autoggl");
-
 function activate(context) {
   const authenticateToggl = vscode.commands.registerCommand(
     "autoggl.authenticateToggl",
@@ -37,7 +33,11 @@ function activate(context) {
                 .update("autoggl.togglApiToken", apiToken, true)
                 .then(() => {
                   // Verify successful update of configuration value
-                  if (config.get("togglApiToken") === apiToken) {
+                  if (
+                    vscode.workspace
+                      .getConfiguration("autoggl")
+                      .get("togglApiToken") === apiToken
+                  ) {
                     vscode.window.showInformationMessage(
                       "Toggl API token updated successfully!"
                     );
@@ -57,7 +57,30 @@ function activate(context) {
     }
   );
 
+  const enable = vscode.commands.registerCommand("autoggl.enable", async () => {
+    return vscode.workspace
+      .getConfiguration()
+      .update("autoggl.enabled", true, true)
+      .then(() => {
+        vscode.window.showInformationMessage("Autoggl: Tracking Enabled");
+      });
+  });
+
+  const disable = vscode.commands.registerCommand(
+    "autoggl.disable",
+    async () => {
+      vscode.workspace
+        .getConfiguration()
+        .update("autoggl.enabled", false, true)
+        .then(() => {
+          vscode.window.showInformationMessage("Autoggl: Tracking Disabled");
+        });
+    }
+  );
+
   context.subscriptions.push(authenticateToggl);
+  context.subscriptions.push(enable);
+  context.subscriptions.push(disable);
 }
 
 exports.activate = activate;
