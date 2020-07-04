@@ -9,11 +9,7 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:autoggl.authenticateToggl",
-		"onCommand:autoggl.enable",
-		"onCommand:autoggl.disable"
-	],
+	"activationEvents": ["*"],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
