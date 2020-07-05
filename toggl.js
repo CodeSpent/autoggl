@@ -120,7 +120,6 @@ const startTimer = (apiToken, projectId) => {
 };
 
 const stopTimer = (apiToken, timeEntryId) => {
-  console.log(timeEntryId);
   return axios({
     method: "put",
     url: `https://www.toggl.com/api/v8/time_entries/${timeEntryId}/stop`,

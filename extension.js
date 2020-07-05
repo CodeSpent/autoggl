@@ -114,49 +114,81 @@ async function activate(context) {
     }
   );
 
+  const pauseTimer = vscode.commands.registerCommand(
+    "autoggl.pauseTimer",
+    async () => {
+      let apiToken = vscode.workspace
+        .getConfiguration()
+        .get("autoggl.togglApiToken");
+      let activeTimeEntryId = vscode.workspace
+        .getConfiguration()
+        .get("autoggl.activeTimeEntryId");
+
+      await toggl.stopTimer(apiToken, activeTimeEntryId).then(() => {
+        vscode.window.showInformationMessage("Autoggl: Timer Paused");
+      });
+    }
+  );
+
+  const startTimer = vscode.commands.registerCommand(
+    "autoggl.startTimer",
+    async () => {
+      let apiToken = vscode.workspace
+        .getConfiguration("autoggl")
+        .get("togglApiToken");
+      let workspaceId = vscode.workspace
+        .getConfiguration("autoggl")
+        .get("workspaceId");
+
+      let openedProjectName = vscode.workspace.workspaceFolders[0].name;
+      let togglProjects = await toggl.getWorkspaceProjects(
+        apiToken,
+        workspaceId
+      );
+
+      let togglProjectNames = togglProjects.map((project) => {
+        return project.name;
+      });
+
+      let currentProjectId;
+
+      if (togglProjectNames.includes(openedProjectName)) {
+        currentProjectId = togglProjects.filter(
+          (project) => project.name === openedProjectName
+        )[0].id;
+      } else {
+        let createdProject = await toggl.createProject(
+          apiToken,
+          openedProjectName,
+          workspaceId
+        );
+        currentProjectId = createdProject.id;
+      }
+
+      // Start a time entry
+      let timeEntry = await toggl.startTimer(apiToken, currentProjectId);
+      let timeEntryId = timeEntry.id;
+
+      await vscode.workspace
+        .getConfiguration()
+        .update("autoggl.activeTimeEntryId", timeEntryId, true);
+
+      await vscode.window.showInformationMessage(
+        `Autoggl: Timer Started for '${openedProjectName}'`
+      );
+    }
+  );
+
   // Register our commands to context
   context.subscriptions.push(configureToggl);
   context.subscriptions.push(enable);
   context.subscriptions.push(disable);
+  context.subscriptions.push(pauseTimer);
+  context.subscriptions.push(startTimer);
 
   // Start project tracking if currently enabled
   if (vscode.workspace.getConfiguration("autoggl").get("enabled")) {
-    let apiToken = vscode.workspace
-      .getConfiguration("autoggl")
-      .get("togglApiToken");
-    let workspaceId = vscode.workspace
-      .getConfiguration("autoggl")
-      .get("workspaceId");
-
-    let openedProjectName = vscode.workspace.workspaceFolders[0].name;
-    let togglProjects = await toggl.getWorkspaceProjects(apiToken, workspaceId);
-
-    let togglProjectNames = togglProjects.map((project) => {
-      return project.name;
-    });
-
-    let currentProjectId;
-
-    if (togglProjectNames.includes(openedProjectName)) {
-      currentProjectId = togglProjects.filter(
-        (project) => project.name === openedProjectName
-      )[0].id;
-    } else {
-      let createdProject = await toggl.createProject(
-        apiToken,
-        openedProjectName,
-        workspaceId
-      );
-      currentProjectId = createdProject.id;
-    }
-
-    // Start a time entry
-    let timeEntry = await toggl.startTimer(apiToken, currentProjectId);
-    let timeEntryId = timeEntry.id;
-
-    await vscode.workspace
-      .getConfiguration()
-      .update("autoggl.activeTimeEntryId", timeEntryId, true);
+    vscode.commands.executeCommand("autoggl.startTimer");
   }
 }
 

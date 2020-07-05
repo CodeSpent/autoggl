@@ -24,6 +24,14 @@
 			{
 				"command": "autoggl.disable",
 				"title": "Autoggl: Disable Tracking"
+			},
+			{
+				"command": "autoggl.pauseTimer",
+				"title": "Autoggl: Pause Timer"
+			},
+			{
+				"command": "autoggl.startTimer",
+				"title": "Autoggl: Start Timer"
 			}
 		],
 		"configuration": {
