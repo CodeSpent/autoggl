@@ -149,13 +149,33 @@ async function activate(context) {
       );
       currentProjectId = createdProject.id;
     }
+
+    // Start a time entry
+    let timeEntry = await toggl.startTimer(apiToken, currentProjectId);
+    let timeEntryId = timeEntry.id;
+
+    await vscode.workspace
+      .getConfiguration()
+      .update("autoggl.activeTimeEntryId", timeEntryId, true);
   }
 }
 
 exports.activate = activate;
 
 // this method is called when your extension is deactivated
-function deactivate() {}
+async function deactivate() {
+  const apiToken = vscode.workspace
+    .getConfiguration("autoggl")
+    .get("togglApiToken");
+
+  const activeTimeEntryId = vscode.workspace
+    .getConfiguration()
+    .get("autoggl.activeTimeEntryId");
+
+  await toggl.stopTimer(apiToken, activeTimeEntryId);
+}
+
+exports.deactivate = deactivate;
 
 module.exports = {
   activate,

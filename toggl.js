@@ -96,7 +96,50 @@ const createProject = (apiToken, projectName, workspaceId) => {
   });
 };
 
+const startTimer = (apiToken, projectId) => {
+  return axios({
+    method: "post",
+    url: "https://www.toggl.com/api/v8/time_entries/start",
+    auth: {
+      // Per Toggl API docs supply the apiToken as the
+      // username, and a string of 'api_token' for the password.
+      // Reference: https://github.com/toggl/toggl_api_docs/blob/master/chapters/authentication.md
+      username: apiToken,
+      password: "api_token",
+    },
+    headers: { "Content-Type": "application/json" },
+    data: {
+      time_entry: {
+        pid: projectId,
+        created_with: "Autoggl Code Extension",
+      },
+    },
+  }).then((response) => {
+    return response.data.data;
+  });
+};
+
+const stopTimer = (apiToken, timeEntryId) => {
+  console.log(timeEntryId);
+  return axios({
+    method: "put",
+    url: `https://www.toggl.com/api/v8/time_entries/${timeEntryId}/stop`,
+    auth: {
+      // Per Toggl API docs supply the apiToken as the
+      // username, and a string of 'api_token' for the password.
+      // Reference: https://github.com/toggl/toggl_api_docs/blob/master/chapters/authentication.md
+      username: apiToken,
+      password: "api_token",
+    },
+    headers: { "Content-Type": "application/json" },
+  }).then((response) => {
+    return response.data.data;
+  });
+};
+
 exports.validateApiToken = validateApiToken;
 exports.getUserWorkspaces = getUserWorkspaces;
 exports.getWorkspaceProjects = getWorkspaceProjects;
 exports.createProject = createProject;
+exports.startTimer = startTimer;
+exports.stopTimer = stopTimer;
