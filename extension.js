@@ -1,7 +1,7 @@
 const vscode = require("vscode");
 const toggl = require("./toggl");
 
-function activate(context) {
+async function activate(context) {
   const configureToggl = vscode.commands.registerCommand(
     "autoggl.configureToggl",
     async () => {
@@ -113,9 +113,43 @@ function activate(context) {
       }
     }
   );
+
+  // Register our commands to context
   context.subscriptions.push(configureToggl);
   context.subscriptions.push(enable);
   context.subscriptions.push(disable);
+
+  // Start project tracking if currently enabled
+  if (vscode.workspace.getConfiguration("autoggl").get("enabled")) {
+    let apiToken = vscode.workspace
+      .getConfiguration("autoggl")
+      .get("togglApiToken");
+    let workspaceId = vscode.workspace
+      .getConfiguration("autoggl")
+      .get("workspaceId");
+
+    let openedProjectName = vscode.workspace.workspaceFolders[0].name;
+    let togglProjects = await toggl.getWorkspaceProjects(apiToken, workspaceId);
+
+    let togglProjectNames = togglProjects.map((project) => {
+      return project.name;
+    });
+
+    let currentProjectId;
+
+    if (togglProjectNames.includes(openedProjectName)) {
+      currentProjectId = togglProjects.filter(
+        (project) => project.name === openedProjectName
+      )[0].id;
+    } else {
+      let createdProject = await toggl.createProject(
+        apiToken,
+        openedProjectName,
+        workspaceId
+      );
+      currentProjectId = createdProject.id;
+    }
+  }
 }
 
 exports.activate = activate;

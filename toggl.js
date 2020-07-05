@@ -53,5 +53,50 @@ const getUserWorkspaces = (apiToken) => {
     });
 };
 
+const getWorkspaceProjects = (apiToken, workspaceId) => {
+  return axios({
+    method: "get",
+    url: `https://www.toggl.com/api/v8/workspaces/${workspaceId}/projects`,
+    auth: {
+      // Per Toggl API docs supply the apiToken as the
+      // username, and a string of 'api_token' for the password.
+      // Reference: https://github.com/toggl/toggl_api_docs/blob/master/chapters/authentication.md
+      username: apiToken,
+      password: "api_token",
+    },
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return { error: error.message };
+    });
+};
+
+const createProject = (apiToken, projectName, workspaceId) => {
+  return axios({
+    method: "post",
+    url: "https://www.toggl.com/api/v8/projects",
+    auth: {
+      // Per Toggl API docs supply the apiToken as the
+      // username, and a string of 'api_token' for the password.
+      // Reference: https://github.com/toggl/toggl_api_docs/blob/master/chapters/authentication.md
+      username: apiToken,
+      password: "api_token",
+    },
+    headers: { "Content-Type": "application/json" },
+    data: {
+      project: {
+        name: projectName,
+        wid: workspaceId,
+      },
+    },
+  }).then((response) => {
+    return response.data.data;
+  });
+};
+
 exports.validateApiToken = validateApiToken;
 exports.getUserWorkspaces = getUserWorkspaces;
+exports.getWorkspaceProjects = getWorkspaceProjects;
+exports.createProject = createProject;
