@@ -146,23 +146,34 @@ async function activate(context) {
         workspaceId
       );
 
-      let togglProjectNames = togglProjects.map((project) => {
-        return project.name;
-      });
-
       let currentProjectId;
 
-      if (togglProjectNames.includes(openedProjectName)) {
-        currentProjectId = togglProjects.filter(
-          (project) => project.name === openedProjectName
-        )[0].id;
-      } else {
+      // Create a project if it doesn't exist, or else get the existing
+      if (!togglProjects) {
         let createdProject = await toggl.createProject(
           apiToken,
           openedProjectName,
           workspaceId
         );
+
         currentProjectId = createdProject.id;
+      } else {
+        let togglProjectNames = togglProjects.map((project) => {
+          return project.name;
+        });
+
+        if (togglProjectNames.includes(openedProjectName)) {
+          currentProjectId = togglProjects.filter(
+            (project) => project.name === openedProjectName
+          )[0].id;
+        } else {
+          let createdProject = await toggl.createProject(
+            apiToken,
+            openedProjectName,
+            workspaceId
+          );
+          currentProjectId = createdProject.id;
+        }
       }
 
       // Start a time entry
