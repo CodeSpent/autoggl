@@ -1,5 +1,6 @@
 const vscode = require("vscode");
 const toggl = require("./toggl");
+const { open } = require("fs");
 
 async function activate(context) {
   const configureToggl = vscode.commands.registerCommand(
@@ -174,6 +175,10 @@ async function activate(context) {
           );
           currentProjectId = createdProject.id;
         }
+
+        vscode.window.showInformationMessage(
+          `Autoggl: Starting timer for '${openedProjectName}'.`
+        );
       }
 
       // Start a time entry
