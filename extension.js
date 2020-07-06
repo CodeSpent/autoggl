@@ -216,6 +216,10 @@ async function deactivate() {
     .get("autoggl.activeTimeEntryId");
 
   await toggl.stopTimer(apiToken, activeTimeEntryId);
+
+  vscode.workspace
+    .getConfiguration()
+    .update("autoggl.activeTimeEntryId", undefined, true);
 }
 
 exports.deactivate = deactivate;
