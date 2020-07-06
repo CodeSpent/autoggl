@@ -22,7 +22,6 @@ This extension contributes the following settings:
 * `autoggl.activeTimeEntryId`: currently active Toggl time entry resource ID
 
 ## Known Issues
-- When the user has 0 existing projects in Toggl, starting an initial timer fails.
 
 
 ## Release Notes
