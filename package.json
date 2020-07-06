@@ -2,6 +2,7 @@
 	"name": "autoggl",
 	"displayName": "autoggl",
 	"description": "Automatically track project hours based on working directory.",
+	"publisher": "CodeSpent",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.46.0"
