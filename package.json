@@ -3,6 +3,13 @@
 	"displayName": "autoggl",
 	"description": "Automatically track project hours based on working directory.",
 	"publisher": "CodeSpent",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/CodeSpent/autoggl"
+	},
+	"bugs": {
+		"url": "https://github.com/CodeSpent/autoggl/issues"
+	},
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.46.0"
