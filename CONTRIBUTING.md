@@ -1,4 +1,4 @@
-#Contributing
+# Contributing
 
 **Autoggl** uses [Commitizen](https://github.com/commitizen/cz-cli) for commit message consistency, [Husky](https://github.com/typicode/husky) for pre-commit hooks, [Eslint](https://github.com/eslint/eslint) for linting, and [Prettier](https://github.com/prettier/prettier) for formatting.
 
