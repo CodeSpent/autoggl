@@ -25,6 +25,10 @@ This extension contributes the following settings:
 ## Known Issues
 - When the user has 0 existing projects in Toggl, starting an initial timer fails.
 
+## Contributing
+**Autoggl** is fully open source and exists largely to help devs that are new to OSS acclimate to the environment. All contributions are welcome and appreciated. :)
+
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for steps for contributing!
 
 ## Release Notes
 
