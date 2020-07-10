@@ -23,6 +23,7 @@ This extension contributes the following settings:
 * `autoggl.activeTimeEntryId`: currently active Toggl time entry resource ID
 
 ## Known Issues
+Only thing worse than known issues is unknown issues. Please report all issues in the [Issue Tracker](https://github.com/autoggl/issues/).
 
 ## Contributing
 **Autoggl** is fully open source and exists largely to help devs that are new to OSS acclimate to the environment. All contributions are welcome and appreciated. :)
