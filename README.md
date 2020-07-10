@@ -1,4 +1,5 @@
 # Autoggl
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 Automatically track your time on projects with Toggl. Autoggl creates Toggl projects for your code workspaces and initiates timers while you're working automatically.
 
