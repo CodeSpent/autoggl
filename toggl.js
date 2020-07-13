@@ -136,9 +136,27 @@ const stopTimer = (apiToken, timeEntryId) => {
   });
 };
 
+const getTimeEntryDetails = (apiToken, timeEntryId) => {
+  return axios({
+    method: 'get',
+    url: `https://www.toggl.com/api/v8/time_entries/${timeEntryId}`,
+    auth: {
+      // Per Toggl API docs supply the apiToken as the
+      // username, and a string of 'api_token' for the password.
+      // Reference: https://github.com/toggl/toggl_api_docs/blob/master/chapters/authentication.md
+      username: apiToken,
+      password: 'api_token',
+    },
+    headers: {'Content-Type': 'application/json'},
+  }).then((response) => {
+    return response.data.data;
+  });
+};
+
 exports.validateApiToken = validateApiToken;
 exports.getUserWorkspaces = getUserWorkspaces;
 exports.getWorkspaceProjects = getWorkspaceProjects;
 exports.createProject = createProject;
 exports.startTimer = startTimer;
 exports.stopTimer = stopTimer;
+exports.getTimeEntryDetails = getTimeEntryDetails;
