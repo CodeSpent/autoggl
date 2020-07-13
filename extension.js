@@ -1,21 +1,21 @@
-const vscode = require("vscode");
-const toggl = require("./toggl");
-const { open } = require("fs");
+const vscode = require('vscode');
+const toggl = require('./toggl');
+const {open} = require('fs');
 
 async function activate(context) {
   const configureToggl = vscode.commands.registerCommand(
-    "autoggl.configureToggl",
+    'autoggl.configureToggl',
     async () => {
       let apiToken = await vscode.window.showInputBox({
         password: true,
         ignoreFocusOut: true,
-        placeHolder: "API Token",
-        prompt: "Get your API Token at https://toggl.com/app/profile",
+        placeHolder: 'API Token',
+        prompt: 'Get your API Token at https://toggl.com/app/profile',
       });
 
-      if (!apiToken || apiToken === "" || apiToken === undefined) {
+      if (!apiToken || apiToken === '' || apiToken === undefined) {
         vscode.window.showErrorMessage(
-          "No token provided. If a token is configured already, it will not be replaced."
+          'No token provided. If a token is configured already, it will not be replaced.',
         );
         return;
       }
@@ -31,24 +31,24 @@ async function activate(context) {
 
         await vscode.workspace
           .getConfiguration()
-          .update("autoggl.togglApiToken", apiToken, true);
+          .update('autoggl.togglApiToken', apiToken, true);
 
         // Verify successful update of configuration value
         if (
-          vscode.workspace.getConfiguration("autoggl").get("togglApiToken") ===
+          vscode.workspace.getConfiguration('autoggl').get('togglApiToken') ===
           apiToken
         ) {
           vscode.window.showInformationMessage(
-            "Toggl API token updated successfully!"
+            'Toggl API token updated successfully!',
           );
         } else {
           vscode.window.showErrorMessage(
-            "Unable to update Toggl API token. Please try updating in settings manually."
+            'Unable to update Toggl API token. Please try updating in settings manually.',
           );
         }
       } else {
         vscode.window.showErrorMessage(
-          `Toggl Token Error: ${tokenValidation.error}`
+          `Toggl Token Error: ${tokenValidation.error}`,
         );
       }
 
@@ -66,85 +66,85 @@ async function activate(context) {
         {
           canPickMany: false,
           ignoreFocusOut: true,
-          placeHolder: "Select a workspace..",
-        }
+          placeHolder: 'Select a workspace..',
+        },
       );
 
       let selectedWorkspaces = await workspaces.filter(
-        (workspace) => workspace.name === selectedWorkspaceName
+        (workspace) => workspace.name === selectedWorkspaceName,
       );
 
       await vscode.workspace
         .getConfiguration()
-        .update("autoggl.workspaceId", selectedWorkspaces[0].id, true);
+        .update('autoggl.workspaceId', selectedWorkspaces[0].id, true);
 
       vscode.window.showInformationMessage(
-        `Autoggl: Set ${selectedWorkspaceName} as active Workspace.`
+        `Autoggl: Set ${selectedWorkspaceName} as active Workspace.`,
       );
-    }
+    },
   );
 
-  const enable = vscode.commands.registerCommand("autoggl.enable", async () => {
+  const enable = vscode.commands.registerCommand('autoggl.enable', async () => {
     await vscode.workspace
       .getConfiguration()
-      .update("autoggl.enabled", true, true);
-    if (vscode.workspace.getConfiguration().get("autoggl.enabled") === true) {
-      vscode.window.showInformationMessage("Autoggl: Tracking Enabled");
+      .update('autoggl.enabled', true, true);
+    if (vscode.workspace.getConfiguration().get('autoggl.enabled') === true) {
+      vscode.window.showInformationMessage('Autoggl: Tracking Enabled');
     } else {
       vscode.window.showErrorMessage(
-        "Autoggl: Unable to enable Autoggl. Try enabling manually in settings."
+        'Autoggl: Unable to enable Autoggl. Try enabling manually in settings.',
       );
     }
   });
 
   const disable = vscode.commands.registerCommand(
-    "autoggl.disable",
+    'autoggl.disable',
     async () => {
       await vscode.workspace
         .getConfiguration()
-        .update("autoggl.enabled", false, true);
+        .update('autoggl.enabled', false, true);
       if (
-        vscode.workspace.getConfiguration().get("autoggl.enabled") === false
+        vscode.workspace.getConfiguration().get('autoggl.enabled') === false
       ) {
-        vscode.window.showInformationMessage("Autoggl: Tracking Disabled");
+        vscode.window.showInformationMessage('Autoggl: Tracking Disabled');
       } else {
         vscode.window.showErrorMessage(
-          "Autoggl: Unable to disable Autoggl. Try disabling manually in settings."
+          'Autoggl: Unable to disable Autoggl. Try disabling manually in settings.',
         );
       }
-    }
+    },
   );
 
   const pauseTimer = vscode.commands.registerCommand(
-    "autoggl.pauseTimer",
+    'autoggl.pauseTimer',
     async () => {
       let apiToken = vscode.workspace
         .getConfiguration()
-        .get("autoggl.togglApiToken");
+        .get('autoggl.togglApiToken');
       let activeTimeEntryId = vscode.workspace
         .getConfiguration()
-        .get("autoggl.activeTimeEntryId");
+        .get('autoggl.activeTimeEntryId');
 
       await toggl.stopTimer(apiToken, activeTimeEntryId).then(() => {
-        vscode.window.showInformationMessage("Autoggl: Timer Paused");
+        vscode.window.showInformationMessage('Autoggl: Timer Paused');
       });
-    }
+    },
   );
 
   const startTimer = vscode.commands.registerCommand(
-    "autoggl.startTimer",
+    'autoggl.startTimer',
     async () => {
       let apiToken = vscode.workspace
-        .getConfiguration("autoggl")
-        .get("togglApiToken");
+        .getConfiguration('autoggl')
+        .get('togglApiToken');
       let workspaceId = vscode.workspace
-        .getConfiguration("autoggl")
-        .get("workspaceId");
+        .getConfiguration('autoggl')
+        .get('workspaceId');
 
       let openedProjectName = vscode.workspace.workspaceFolders[0].name;
       let togglProjects = await toggl.getWorkspaceProjects(
         apiToken,
-        workspaceId
+        workspaceId,
       );
 
       let currentProjectId;
@@ -154,7 +154,7 @@ async function activate(context) {
         let createdProject = await toggl.createProject(
           apiToken,
           openedProjectName,
-          workspaceId
+          workspaceId,
         );
 
         currentProjectId = createdProject.id;
@@ -165,19 +165,19 @@ async function activate(context) {
 
         if (togglProjectNames.includes(openedProjectName)) {
           currentProjectId = togglProjects.filter(
-            (project) => project.name === openedProjectName
+            (project) => project.name === openedProjectName,
           )[0].id;
         } else {
           let createdProject = await toggl.createProject(
             apiToken,
             openedProjectName,
-            workspaceId
+            workspaceId,
           );
           currentProjectId = createdProject.id;
         }
 
         vscode.window.showInformationMessage(
-          `Autoggl: Starting timer for '${openedProjectName}'.`
+          `Autoggl: Starting timer for '${openedProjectName}'.`,
         );
       }
 
@@ -187,12 +187,12 @@ async function activate(context) {
 
       await vscode.workspace
         .getConfiguration()
-        .update("autoggl.activeTimeEntryId", timeEntryId, true);
+        .update('autoggl.activeTimeEntryId', timeEntryId, true);
 
       await vscode.window.showInformationMessage(
-        `Autoggl: Timer Started for '${openedProjectName}'`
+        `Autoggl: Timer Started for '${openedProjectName}'`,
       );
-    }
+    },
   );
 
   // Register our commands to context
@@ -203,8 +203,8 @@ async function activate(context) {
   context.subscriptions.push(startTimer);
 
   // Start project tracking if currently enabled
-  if (vscode.workspace.getConfiguration("autoggl").get("enabled")) {
-    vscode.commands.executeCommand("autoggl.startTimer");
+  if (vscode.workspace.getConfiguration('autoggl').get('enabled')) {
+    vscode.commands.executeCommand('autoggl.startTimer');
   }
 }
 
@@ -213,18 +213,18 @@ exports.activate = activate;
 // this method is called when your extension is deactivated
 async function deactivate() {
   const apiToken = vscode.workspace
-    .getConfiguration("autoggl")
-    .get("togglApiToken");
+    .getConfiguration('autoggl')
+    .get('togglApiToken');
 
   const activeTimeEntryId = vscode.workspace
     .getConfiguration()
-    .get("autoggl.activeTimeEntryId");
+    .get('autoggl.activeTimeEntryId');
 
   await toggl.stopTimer(apiToken, activeTimeEntryId);
 
   vscode.workspace
     .getConfiguration()
-    .update("autoggl.activeTimeEntryId", undefined, true);
+    .update('autoggl.activeTimeEntryId', undefined, true);
 }
 
 exports.deactivate = deactivate;
