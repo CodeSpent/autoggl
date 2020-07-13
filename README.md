@@ -22,6 +22,22 @@ This extension contributes the following settings:
 * `autoggl.workspaceId`: your preferred Toggl workspace ID
 * `autoggl.activeTimeEntryId`: currently active Toggl time entry resource ID
 
+## Installation
+*Disclaimer: Autoggl is currently only available as a pre-release, but will be added to the extensions market once stable!*
+
+### Manual Installation
+- Navigate to [Releases](https://github.com/CodeSpent/autoggl/releases).
+- Download the VSIX file for the release you want to install.
+- Open VSCode and select the *Extensions* icon on the Workbench Sidebar.
+- Select the *meatballs* (3 dots) menu in the top right of the Extensions panel.
+- Select *Install from VSIX...* from the list, and select the downloaded VSIX file.
+
+## Getting Started
+### Configure Toggl
+To configure the extension, open your command palette (CTRL/CMD + Shift + P) and select **Autoggl: Configure** to start the configuration wizard.
+
+You will need a Toggl API Token located in your [Toggl Profile](https://toggl.com/app/profile) and on successful authentication you'll be asked to select from your available workspaces.
+
 ## Known Issues
 Only thing worse than known issues is unknown issues. Please report all issues in the [Issue Tracker](https://github.com/autoggl/issues/).
 
