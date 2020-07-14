@@ -73,7 +73,7 @@
 	},
 	"scripts": {
 		"lint": "eslint .",
-		"precommit": "lint-staged",
+		"precommit": "lint-staged --allow-empty",
 		"pretest": "npm run lint",
 		"test": "node ./test/runTest.js"
 	},
